@@ -3,7 +3,6 @@ from mysql.connector import Error
 import customtkinter as ctk
 from tkinter import messagebox
 
-
 # Función para conectar a la base de datos
 def conectar_db():
     try:
@@ -21,6 +20,32 @@ def conectar_db():
 
 # Función para cargar un nuevo producto
 def cargar_producto():
+    for widget in root.winfo_children():
+        widget.destroy()
+
+    frame = ctk.CTkFrame(root)
+    frame.pack(expand=True, pady=20, padx=20)
+
+    ctk.CTkLabel(frame, text="Nombre del Producto:").pack(pady=5)
+    entry_nombre = ctk.CTkEntry(frame)
+    entry_nombre.pack()
+
+    ctk.CTkLabel(frame, text="Descripción del Producto:").pack(pady=5)
+    entry_descripcion = ctk.CTkEntry(frame)
+    entry_descripcion.pack()
+
+    ctk.CTkLabel(frame, text="Precio del Producto:").pack(pady=5)
+    entry_precio = ctk.CTkEntry(frame)
+    entry_precio.pack()
+
+    ctk.CTkLabel(frame, text="Stock del Producto:").pack(pady=5)
+    entry_stock = ctk.CTkEntry(frame)
+    entry_stock.pack()
+
+    ctk.CTkLabel(frame, text="ID de Categoría:").pack(pady=5)
+    entry_id_categoria = ctk.CTkEntry(frame)
+    entry_id_categoria.pack()
+
     def guardar_producto():
         nombre = entry_nombre.get()
         descripcion = entry_descripcion.get()
@@ -28,7 +53,7 @@ def cargar_producto():
         stock = entry_stock.get()
         id_categoria = entry_id_categoria.get()
         
-        if nombre and descripcion and precio and stock and id_categoria:
+        if nombre and descripcion and precio and stock:
             try:
                 conn = conectar_db()
                 if conn:
@@ -41,40 +66,39 @@ def cargar_producto():
                     cursor.close()
                     conn.close()
                     messagebox.showinfo("Éxito", "Producto cargado con éxito.")
-                    ventana_cargar.destroy()
+                    mostrar_menu()
             except Error as e:
                 messagebox.showerror("Error", f"No se pudo cargar el producto: {e}")
         else:
             messagebox.showwarning("Advertencia", "Debe completar todos los campos.")
-    
-    ventana_cargar = ctk.CTkToplevel(root)
-    ventana_cargar.title("Cargar Producto")
-    ventana_cargar.geometry("400x400")  # Establecer el tamaño de la ventana de carga
 
-    ctk.CTkLabel(ventana_cargar, text="Nombre del Producto:").pack(pady=5)
-    entry_nombre = ctk.CTkEntry(ventana_cargar)
-    entry_nombre.pack()
-
-    ctk.CTkLabel(ventana_cargar, text="Descripción del Producto:").pack(pady=5)
-    entry_descripcion = ctk.CTkEntry(ventana_cargar)
-    entry_descripcion.pack()
-
-    ctk.CTkLabel(ventana_cargar, text="Precio del Producto:").pack(pady=5)
-    entry_precio = ctk.CTkEntry(ventana_cargar)
-    entry_precio.pack()
-
-    ctk.CTkLabel(ventana_cargar, text="Stock del Producto:").pack(pady=5)
-    entry_stock = ctk.CTkEntry(ventana_cargar)
-    entry_stock.pack()
-
-    ctk.CTkLabel(ventana_cargar, text="ID de Categoría:").pack(pady=5)
-    entry_id_categoria = ctk.CTkEntry(ventana_cargar)
-    entry_id_categoria.pack()
-
-    ctk.CTkButton(ventana_cargar, text="Guardar", command=guardar_producto).pack(pady=10)
+    ctk.CTkButton(frame, text="Guardar", command=guardar_producto).pack(pady=10)
+    ctk.CTkButton(frame, text="Volver al menú", command=mostrar_menu).pack(pady=10)
 
 # Función para modificar un producto
 def modificar_producto():
+    for widget in root.winfo_children():
+        widget.destroy()
+
+    frame = ctk.CTkFrame(root)
+    frame.pack(expand=True, pady=20, padx=20)
+
+    ctk.CTkLabel(frame, text="ID del Producto a Modificar:").pack(pady=5)
+    entry_id = ctk.CTkEntry(frame)
+    entry_id.pack()
+
+    ctk.CTkLabel(frame, text="Nuevo Nombre del Producto:").pack(pady=5)
+    entry_nombre = ctk.CTkEntry(frame)
+    entry_nombre.pack()
+
+    ctk.CTkLabel(frame, text="Nuevo Precio del Producto:").pack(pady=5)
+    entry_precio = ctk.CTkEntry(frame)
+    entry_precio.pack()
+
+    ctk.CTkLabel(frame, text="Nuevo Stock del Producto:").pack(pady=5)
+    entry_stock = ctk.CTkEntry(frame)
+    entry_stock.pack()
+
     def actualizar_producto():
         producto_id = entry_id.get()
         nuevo_nombre = entry_nombre.get()
@@ -95,36 +119,23 @@ def modificar_producto():
                     cursor.close()
                     conn.close()
                     messagebox.showinfo("Éxito", "Producto modificado con éxito.")
-                    ventana_modificar.destroy()
+                    mostrar_menu()
             except Error as e:
                 messagebox.showerror("Error", f"No se pudo modificar el producto: {e}")
         else:
             messagebox.showwarning("Advertencia", "Debe completar todos los campos.")
-    
-    ventana_modificar = ctk.CTkToplevel(root)
-    ventana_modificar.title("Modificar Producto")
-    ventana_modificar.geometry("400x300")
-    
-    ctk.CTkLabel(ventana_modificar, text="ID del Producto a Modificar:").pack(pady=5)
-    entry_id = ctk.CTkEntry(ventana_modificar)
-    entry_id.pack()
 
-    ctk.CTkLabel(ventana_modificar, text="Nuevo Nombre del Producto:").pack(pady=5)
-    entry_nombre = ctk.CTkEntry(ventana_modificar)
-    entry_nombre.pack()
-
-    ctk.CTkLabel(ventana_modificar, text="Nuevo Precio del Producto:").pack(pady=5)
-    entry_precio = ctk.CTkEntry(ventana_modificar)
-    entry_precio.pack()
-
-    ctk.CTkLabel(ventana_modificar, text="Nuevo Stock del Producto:").pack(pady=5)
-    entry_stock = ctk.CTkEntry(ventana_modificar)
-    entry_stock.pack()
-
-    ctk.CTkButton(ventana_modificar, text="Actualizar", command=actualizar_producto).pack(pady=10)
+    ctk.CTkButton(frame, text="Actualizar", command=actualizar_producto).pack(pady=10)
+    ctk.CTkButton(frame, text="Volver al menú", command=mostrar_menu).pack(pady=10)
 
 # Función para listar los productos
 def listar_productos():
+    for widget in root.winfo_children():
+        widget.destroy()
+    
+    frame = ctk.CTkFrame(root)
+    frame.pack(expand=True, pady=20, padx=20)
+
     try:
         conn = conectar_db()
         if conn:
@@ -135,12 +146,25 @@ def listar_productos():
             conn.close()
 
             lista_productos = "\n".join([f"ID: {p[0]}, Nombre: {p[1]}, Precio: {p[3]}, Stock: {p[4]}" for p in productos])
-            messagebox.showinfo("Lista de Productos", lista_productos if lista_productos else "No hay productos registrados.")
+            ctk.CTkLabel(frame, text="Lista de Productos:").pack(pady=5)
+            ctk.CTkLabel(frame, text=lista_productos if lista_productos else "No hay productos registrados.").pack(pady=5)
     except Error as e:
         messagebox.showerror("Error", f"No se pudo listar los productos: {e}")
 
+    ctk.CTkButton(frame, text="Volver al menú", command=mostrar_menu).pack(pady=10)
+
 # Función para eliminar un producto
 def eliminar_producto():
+    for widget in root.winfo_children():
+        widget.destroy()
+
+    frame = ctk.CTkFrame(root)
+    frame.pack(expand=True, pady=20, padx=20)
+
+    ctk.CTkLabel(frame, text="ID del Producto a Eliminar:").pack(pady=5)
+    entry_id = ctk.CTkEntry(frame)
+    entry_id.pack()
+
     def borrar_producto():
         producto_id = entry_id.get()
 
@@ -154,22 +178,29 @@ def eliminar_producto():
                     cursor.close()
                     conn.close()
                     messagebox.showinfo("Éxito", "Producto eliminado con éxito.")
-                    ventana_eliminar.destroy()
+                    mostrar_menu()
             except Error as e:
                 messagebox.showerror("Error", f"No se pudo eliminar el producto: {e}")
         else:
             messagebox.showwarning("Advertencia", "Debe ingresar un ID de producto.")
+
+    ctk.CTkButton(frame, text="Eliminar", command=borrar_producto).pack(pady=10)
+    ctk.CTkButton(frame, text="Volver al menú", command=mostrar_menu).pack(pady=10)
+
+# Función principal que contiene el menú
+def mostrar_menu():
+    for widget in root.winfo_children():
+        widget.destroy()
     
-    ventana_eliminar = ctk.CTkToplevel(root)
-    ventana_eliminar.title("Eliminar Producto")
-    ventana_eliminar.geometry("400x300")
+    menu_principal = ctk.CTkFrame(root)
+    menu_principal.pack(expand=True, pady=20, padx=20)
 
-    ctk.CTkLabel(ventana_eliminar, text="ID del Producto a Eliminar:").pack(pady=5)
-    entry_id = ctk.CTkEntry(ventana_eliminar)
-    entry_id.pack()
-
-    ctk.CTkButton(ventana_eliminar, text="Eliminar", command=borrar_producto).pack(pady=10)
-
+    ctk.CTkButton(menu_principal, text="Cargar nuevo producto", command=cargar_producto).pack(pady=5)
+    ctk.CTkButton(menu_principal, text="Modificar producto existente", command=modificar_producto).pack(pady=5)
+    ctk.CTkButton(menu_principal, text="Listar productos", command=listar_productos).pack(pady=5)
+    ctk.CTkButton(menu_principal, text="Eliminar producto", command=eliminar_producto).pack(pady=5)
+    ctk.CTkButton(menu_principal, text="Salir", command=root.quit).pack(pady=5)
+    
 def centrar_ventana(ventana, ancho, alto):
     screen_width = ventana.winfo_screenwidth()
     screen_height = ventana.winfo_screenheight()
@@ -177,22 +208,10 @@ def centrar_ventana(ventana, ancho, alto):
     posicion_y = int(screen_height / 2 - alto / 2)
     ventana.geometry(f'{ancho}x{alto}+{posicion_x}+{posicion_y}')
 
-
-# Función principal que contiene el menú
-def mostrar_menu():
-    menu_principal = ctk.CTkFrame(root)
-    menu_principal.pack(pady=20)
-
-    ctk.CTkButton(menu_principal, text="Cargar nuevo producto", command=cargar_producto).pack(pady=5)
-    ctk.CTkButton(menu_principal, text="Modificar producto existente", command=modificar_producto).pack(pady=5)
-    ctk.CTkButton(menu_principal, text="Listar productos", command=listar_productos).pack(pady=5)
-    ctk.CTkButton(menu_principal, text="Eliminar producto", command=eliminar_producto).pack(pady=5)
-    ctk.CTkButton(menu_principal, text="Salir", command=root.quit).pack(pady=5)
-
 # Crear ventana principal
 root = ctk.CTk()
-root.geometry("600x400")
-centrar_ventana(root, 600, 400)
+root.geometry("500x600")
+centrar_ventana(root, 500, 600)
 root.title("Gestión de Productos")
 
 # Mostrar el menú
