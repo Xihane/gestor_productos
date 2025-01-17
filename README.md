@@ -65,3 +65,7 @@ Muestra una lista de todos los productos registrados en la base de datos.
 Permite eliminar un producto de la base de datos ingresando su ID.
 
 
+## Capturas de Pantalla
+
+![Pantalla Principal](gestor.png)
+
